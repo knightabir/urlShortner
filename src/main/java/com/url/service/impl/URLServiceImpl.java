@@ -3,10 +3,12 @@ package com.url.service.impl;
 import com.url.model.URLModel;
 import com.url.repository.URLRepository;
 import com.url.service.URLService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class URLServiceImpl implements URLService {
 
     @Autowired

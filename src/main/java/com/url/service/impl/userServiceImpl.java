@@ -3,20 +3,34 @@ package com.url.service.impl;
 import com.url.model.User;
 import com.url.repository.UserRepository;
 import com.url.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class userServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public User saveUser(User user) {
-        return userRepository.save(user);
+        User tempUser = new User();
+        tempUser.setEmail(user.getEmail());
+        tempUser.setFirstName(user.getFirstName());
+        tempUser.setLastName(user.getLastName());
+        // Decrypt the password then save to the database
+        tempUser.setPassword(passwordEncoder.encode(user.getPassword()));
+
+
+        return userRepository.save(tempUser);
     }
 
     @Override
@@ -44,5 +58,10 @@ public class userServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
     }
 }
