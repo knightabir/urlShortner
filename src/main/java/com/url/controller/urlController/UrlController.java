@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/url")
 public class UrlController {
@@ -15,17 +17,21 @@ public class UrlController {
 
 
     @PostMapping("/save")
-    public ResponseEntity<String> saveUrl(@RequestBody String url) {
-        return ResponseEntity.ok(urlService.saveURL(url));
+    public ResponseEntity<Map<String, String>> saveUrl(@RequestBody URLModel urlModel) {
+        return ResponseEntity.ok(urlService.saveURL(urlModel.getUrl()));
     }
 
     @GetMapping("/{url}")
     public ResponseEntity<Void> getUrl(@PathVariable String url) {
         // Find the url by the short url and redirect to the actual url
-        String actualUrl = urlService.getActualUrl(url);
+        URLModel actualUrl = urlService.findById(url);
         if (actualUrl != null) {
             // Redirect to the actual url
-            return ResponseEntity.status(302).header("Location", actualUrl).build();
+            // update the click count
+            if (urlService.updateVisitCount(url)) {
+                return ResponseEntity.status(302).header("Location", actualUrl.getUrl()).build();
+            }
+            return ResponseEntity.status(404).body(null);
         }
         return ResponseEntity.notFound().build();
     }
