@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -144,5 +145,10 @@ public class URLServiceImpl implements URLService {
         }
         log.warn("Failed to update visit count for short URL: {}", shortUrl);
         return false;
+    }
+
+    @Override
+    public List<URLModel> getAllUrlsByUser(String userId) {
+        return urlRepository.getAllUrlsByUser(userId);
     }
 }

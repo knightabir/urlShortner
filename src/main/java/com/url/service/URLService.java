@@ -2,6 +2,7 @@ package com.url.service;
 
 import com.url.model.URLModel;
 
+import java.util.List;
 import java.util.Map;
 
 public interface URLService {
@@ -13,4 +14,5 @@ public interface URLService {
     public String getActualUrl(String shortUrl);
     public URLModel findById(String shortUrl);
     public Boolean updateVisitCount(String shortUrl);
+    public List<URLModel> getAllUrlsByUser(String userId);
 }

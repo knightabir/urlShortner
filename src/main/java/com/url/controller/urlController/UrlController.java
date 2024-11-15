@@ -3,9 +3,11 @@ package com.url.controller.urlController;
 import com.url.model.URLModel;
 import com.url.service.URLService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -35,4 +37,16 @@ public class UrlController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PutMapping("/update/{url}")
+    public ResponseEntity<Map<String, String>> updateUrl(@PathVariable String url, @RequestBody URLModel urlModel) {
+        urlService.updateURL(url, urlModel.getUrl());
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "URL updated successfully");
+        response.put("status", "success");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
+    
 }
